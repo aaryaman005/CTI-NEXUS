@@ -1,0 +1,25 @@
+# Virtual environment
+venv/
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Environment
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# Jenkins workspace artifacts
+test-results.xml
+
+# OS
+Thumbs.db
+.DS_Store
