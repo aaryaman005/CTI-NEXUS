@@ -20,6 +20,9 @@ class GraphEngine:
             self.driver.verify_connectivity()
             logger.info(f"Connected to Neo4j at {self.uri}")
         except Exception as e:
+            if self.driver:
+                self.driver.close()
+                self.driver = None
             logger.error(f"Failed to connect to Neo4j: {e}")
             raise
 
