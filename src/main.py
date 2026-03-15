@@ -9,7 +9,8 @@ from src.enrichment.enricher import EnrichmentManager  # noqa: E402
 from src.analysis.graph import GraphEngine  # noqa: E402
 from src.reporting.generator import ReportGenerator  # noqa: E402
 from src.models.indicator import IPv4Indicator, DomainIndicator  # noqa: E402
-
+from src.analysis.correlation import CorrelationEngine  # noqa: E402
+from src.analysis.campaign import CampaignDetector  # noqa: E402
 
 def main():
     logger.info("Starting CTI Nexus Intelligence Core...")
@@ -28,22 +29,14 @@ def main():
     # 2. Graph Engine & Correlation
     graph_engine = GraphEngine()
     try:
-        # Note: requires Neo4j running locally for a successful connection
-        # graph_engine.connect()
-        # To avoid failure when testing without Neo4j, we will print a warning if not connected
-        logger.warning(
-            "Skipping real Neo4j connection for this demo run. "
-            "Graph relationship creation will be skipped/simulated."
-        )
+        graph_engine.connect()
 
-        # We manually stub driver for this quick run if neo4j is down
-        # correlation_engine = CorrelationEngine(graph_engine)
-        # correlation_engine.correlate(enriched_indicators)
+        correlation_engine = CorrelationEngine(graph_engine)
+        correlation_engine.correlate(enriched_indicators)
 
         # Campaign Detection
-        # campaign_detector = CampaignDetector(graph_engine)
-        # campaigns = campaign_detector.detect_campaigns()
-        campaigns = [{"campaign_id": "CMP-SIMULATED-1001", "indicators": "simulated"}]
+        campaign_detector = CampaignDetector(graph_engine)
+        campaigns = campaign_detector.detect_campaigns()
 
         # Reporting
         report_generator = ReportGenerator()
